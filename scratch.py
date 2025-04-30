@@ -165,7 +165,7 @@ if df_1h is not None:
 
     
     # — Row 2 —
-    row2_cols = st.columns([1, 1, 1, 1, 1, 1])
+    row2_cols = st.columns([1, 1, 1, 1, 1, 1, 1, 1])
     with row2_cols[0]:
         orb_filter = st.radio(
             "0-5 ORB Direction",
@@ -185,21 +185,33 @@ if df_1h is not None:
             horizontal=False
         )
     with row2_cols[3]:
+        orb_size_filter_5_10 = st.radio(
+            "0-5 ORB Body / Wicks",
+            options=["All"] + ["0% x < 25%", "25% x <50%", "50% x < 75%", "75% x < 100%"],
+            horizontal=False
+        )
+    with row2_cols[4]:
         orb_filter_5_10 = st.radio(
             "5-10 ORB Direction",
             options=["All"] + sorted(df_1h["5_10_ORB_direction"].dropna().unique().tolist()),
             horizontal=False
         )
-    with row2_cols[4]:
+    with row2_cols[5]:
         orb_true_filter_5_10 = st.radio(
             "5-10 ORB True/False",
             options=["All"] + [True, False],
             horizontal=False
         )
-    with row2_cols[5]:
+    with row2_cols[6]:
         orb_conf_filter_5_10 = st.radio(
             "5-10 ORB Conf. Quarter",
             options=["All"] + ["Q1", "Q2", "Q3", "Q4"],
+            horizontal=False
+        )
+    with row2_cols[7]:
+        orb_size_filter_5_10 = st.radio(
+            "5-10 ORB Body / Wicks",
+            options=["All"] + ["0% x < 25%", "25% x <50%", "50% x < 75%", "75% x < 100%"],
             horizontal=False
         )
 
