@@ -191,7 +191,7 @@ if df_1h is not None:
     if q3_filter != "All":
         filtered_df_1h = filtered_df_1h[filtered_df_1h[f'Q3_{quarter_col_label}'] == q3_filter]
     if q4_filter != "All":
-        filtered_df_1h = filtered_df_1h[filtered_df_1h[f'Q4_{quarter_col_label}' == q4_filter]
+        filtered_df_1h = filtered_df_1h[filtered_df_1h[f'Q4_{quarter_col_label}'] == q4_filter]
     if orb_filter != 'All':
         filtered_df_1h = filtered_df_1h[filtered_df_1h['0_5_ORB_direction'] == orb_filter] 
     if orb_true_filter != 'All':
