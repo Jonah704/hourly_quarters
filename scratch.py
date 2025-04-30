@@ -90,6 +90,8 @@ df_1h["three_hour_start"] = (df_1h["hour"] // 3) * 3
 
 
 if df_1h is not None:
+    df_1h['orb_size_filter_0_5'] = abs(df_1h['0_5_ORB_body_size'])
+    df_1h['orb_size_filter_5_10'] = abs(df_1h['5_10_ORB_body_size'])
 
     ### **Sidebar: Select Instrument and DR Range**
     instrument_options = df_1h['Instrument'].dropna().unique().tolist()
