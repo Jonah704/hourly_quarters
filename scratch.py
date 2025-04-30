@@ -104,7 +104,6 @@ if df_1h is not None:
     selected_quarter_measurement = st.sidebar.selectbox("Measure Quarter From", ["Hourly Open", "Quarterly Open"])
 
 
-
     #Filters
     
     # — Row 1 —
@@ -166,7 +165,7 @@ if df_1h is not None:
 
     
     # — Row 2 —
-    row2_cols = st.columns([1, 1, 1, 1])
+    row2_cols = st.columns([1, 1, 1, 1, 1, 1])
     with row2_cols[0]:
         orb_filter = st.radio(
             "0-5 ORB Direction",
@@ -180,15 +179,27 @@ if df_1h is not None:
             horizontal=False
         )
     with row2_cols[2]:
+        orb_conf_time = st.radio(
+            "0-5 ORB Confirmation Quarter",
+            options=["All"] + ["Q1", "Q2", "q3", "Q4"],
+            horizontal=False
+        )
+    with row2_cols[3]:
         orb_filter_5_10 = st.radio(
             "5-10 ORB Direction",
             options=["All"] + sorted(df_1h["5_10_ORB_direction"].dropna().unique().tolist()),
             horizontal=False
         )
-    with row2_cols[3]:
+    with row2_cols[4]:
         orb_true_filter_5_10 = st.radio(
             "5-10 ORB True/False",
             options=["All"] + [True, False],
+            horizontal=False
+        )
+    with row2_cols[5]:
+        orb_conf_time_5_10 = st.radio(
+            "5-10 ORB Confirmation Quarter",
+            options=["All"] + ["Q1", "Q2", "q3", "Q4"],
             horizontal=False
         )
 
