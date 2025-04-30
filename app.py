@@ -7,7 +7,7 @@ st.set_page_config(layout='wide')
 
 # 1) Define a cached loader
 @st.cache_data
-def load_quartal(urls, version="v2"):   # <- bump this string to invalidate
+def load_quartal(urls, version="v3"):   # <- bump this string to invalidate
     dfs = []
     for url in urls:
         df = pd.read_csv(url)
