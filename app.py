@@ -101,7 +101,7 @@ if df_1h is not None:
     selected_three_hour = st.sidebar.selectbox("Select 3H Start", three_hour_options)
     day_options = ['All'] + ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
     selected_day = st.sidebar.selectbox("Day of Week", day_options)
-    selected_quarter_measurement = st.sidebar.selectbox("Day of Week", ["From Hourly Open", "From Quarterly Open"])
+    selected_quarter_measurement = st.sidebar.selectbox("Measure Quarter From", ["Hourly Open", "Quarterly Open"])
 
     # Centered line with four Q-direction dropdowns
     st.markdown("### Hour Filters")
