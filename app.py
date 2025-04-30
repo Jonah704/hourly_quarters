@@ -52,8 +52,11 @@ if not st.session_state["authenticated"]:
         if username in USER_CREDENTIALS and password == USER_CREDENTIALS[username]:
             st.session_state["authenticated"] = True
             st.session_state["username"] = username  # Store the username
-            st.success(f"Welcome, {username}! Redirecting...")
-            st.rerun()  # Refresh to load the dashboard
+            # ← Clear *all* @st.cache_data caches here:
+            st.cache_data.clear()
+
+            st.success(f"Welcome, {username}! Loading fresh data…")
+            st.rerun()
         else:
             st.error("Incorrect username or password. Please try again.")
 
