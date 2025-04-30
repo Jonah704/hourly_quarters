@@ -105,8 +105,7 @@ if df_1h is not None:
 
     # Centered line with four Q-direction dropdowns
     # your original widths for all 12 widgets
-    widths = [0.75, 0.75, 0.75, 0.75, 0.75, 0.75,   # first 6
-              0.75, 0.8,  1.1,  0.7,  0.7,  1.5]   # last 6
+    widths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]   # last 6
     
     # split into two rows
     mid = len(widths) // 2
