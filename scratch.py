@@ -267,7 +267,7 @@ if df_1h is not None:
         filtered_df_1h = filtered_df_1h[filtered_df_1h['5_10_ORB_conf_bucket'] == orb_conf_filter_5_10] 
 
     if orb_size_filter_5_10 != 'All':
-            low, high = SIZE_BINS_0_5[orb_size_filter]
+            low, high = SIZE_BINS_0_5[orb_size_filter_5_10]
             # filter on the absolute value
             filtered_df_1h = filtered_df_1h[
                 filtered_df_1h['5_10_ORB_body_size'].abs().between(low, high, inclusive='left')
