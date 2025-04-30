@@ -90,8 +90,6 @@ df_1h["three_hour_start"] = (df_1h["hour"] // 3) * 3
 
 
 if df_1h is not None:
-    df_1h['orb_size_filter_0_5'] = abs(df_1h['0_5_ORB_body_size'])
-    df_1h['orb_size_filter_5_10'] = abs(df_1h['5_10_ORB_body_size'])
 
     ### **Sidebar: Select Instrument and DR Range**
     instrument_options = df_1h['Instrument'].dropna().unique().tolist()
@@ -107,7 +105,12 @@ if df_1h is not None:
 
 
     #Filters
-    
+    SIZE_BINS_0_5 = {
+    '0% to 25%': (0.00, 0.25),
+    '25% to 50%': (0.25, 0.50),
+    '50% to 75%': (0.50, 0.75),
+    '75% to 100%': (0.75, 1.00),
+    }
     # — Row 1 —
     row1_cols = st.columns([1, 1, 1, 1, 1, 1, 1, 1])
     with row1_cols[0]:
@@ -189,10 +192,7 @@ if df_1h is not None:
     with row2_cols[3]:
         orb_size_filter = st.radio(
             "0-5 ORB Body / Wicks",
-            options=["All"] + [
-                '0% ≥ x > 25%', '25% ≥ x > 50%',
-                '50% ≥ x > 75%', '75% ≥ x > 100%'
-            ],
+            options=["All"] + list(SIZE_BINS_0_5.keys())
             horizontal=False
         )
     with row2_cols[4]:
@@ -216,10 +216,7 @@ if df_1h is not None:
     with row2_cols[7]:
         orb_size_filter_5_10 = st.radio(
             "5-10 ORB Body / Wicks",
-            options=["All"] + [
-                '0% ≥ x > 25%', '25% ≥ x > 50%',
-                '50% ≥ x > 75%', '75% ≥ x > 100%'
-            ],
+            options=["All"] + list(SIZE_BINS_0_5.keys()),
             horizontal=False
         )
 
@@ -256,19 +253,11 @@ if df_1h is not None:
         filtered_df_1h = filtered_df_1h[filtered_df_1h['0_5_ORB_conf_bucket'] == orb_conf_filter] 
 
     if orb_size_filter != 'All':
-
-        if orb_size_filter == '0% >= x > 25%':
-            filtered_df_1h = filtered_df_1h[(filtered_df_1h['0_5_ORB_body_size'] >= 0) &
-                                            (filtered_df_1h['0_5_ORB_body_size'] < 0.25)] 
-        if orb_size_filter == '25% >= x > 50%':
-            filtered_df_1h = filtered_df_1h[(filtered_df_1h['0_5_ORB_body_size'] >= 0.25) &
-                                            (filtered_df_1h['0_5_ORB_body_size'] < 0.50)] 
-        if orb_size_filter == '50% >= x > 75%':
-            filtered_df_1h = filtered_df_1h[(filtered_df_1h['0_5_ORB_body_size'] >= 0.50) &
-                                            (filtered_df_1h['0_5_ORB_body_size'] < 0.75)] 
-        if orb_size_filter == '75% >= x > 100%':
-            filtered_df_1h = filtered_df_1h[(filtered_df_1h['0_5_ORB_body_size'] >= 0.75) &
-                                            (filtered_df_1h['0_5_ORB_body_size'] < 1.00)] 
+            low, high = SIZE_BINS_0_5[orb_size_filter]
+            # filter on the absolute value
+            filtered_df_1h = filtered_df_1h[
+                filtered_df_1h['0_5_ORB_body_size'].abs().between(low, high, inclusive='left')
+            ]
     
     if orb_filter_5_10 != 'All':
         filtered_df_1h = filtered_df_1h[filtered_df_1h['5_10_ORB_direction'] == orb_filter_5_10] 
@@ -278,19 +267,11 @@ if df_1h is not None:
         filtered_df_1h = filtered_df_1h[filtered_df_1h['5_10_ORB_conf_bucket'] == orb_conf_filter_5_10] 
 
     if orb_size_filter_5_10 != 'All':
-
-        if orb_size_filter_5_10 == '0% >= x > 25%':
-            filtered_df_1h = filtered_df_1h[(filtered_df_1h['5_10_ORB_body_size'] >= 0) &
-                                            (filtered_df_1h['5_10_ORB_body_size'] < 0.25)] 
-        if orb_size_filter_5_10 == '25% >= x > 50%':
-            filtered_df_1h = filtered_df_1h[(filtered_df_1h['5_10_ORB_body_size'] >= 0.25) &
-                                            (filtered_df_1h['5_10_ORB_body_size'] < 0.50)] 
-        if orb_size_filter_5_10 == '50% >= x > 75%':
-            filtered_df_1h = filtered_df_1h[(filtered_df_1h['5_10_ORB_body_size'] >= 0.50) &
-                                            (filtered_df_1h['5_10_ORB_body_size'] < 0.75)] 
-        if orb_size_filter_5_10 == '75% >= x > 100%':
-            filtered_df_1h = filtered_df_1h[(filtered_df_1h['5_10_ORB_body_size'] >= 0.75) &
-                                            (filtered_df_1h['5_10_ORB_body_size'] < 1.00)] 
+            low, high = SIZE_BINS_0_5[orb_size_filter]
+            # filter on the absolute value
+            filtered_df_1h = filtered_df_1h[
+                filtered_df_1h['5_10_ORB_body_size'].abs().between(low, high, inclusive='left')
+            ]
         
     if hourly_open_position != 'All':
 
