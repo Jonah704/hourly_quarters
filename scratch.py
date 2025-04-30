@@ -105,7 +105,7 @@ if df_1h is not None:
 
     # Centered line with four Q-direction dropdowns
     # your original widths for all 12 widgets
-    widths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]   # last 6
+    widths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]   # last 6
     
     # split into two rows
     mid = len(widths) // 2
@@ -138,21 +138,21 @@ if df_1h is not None:
             options=["All"] + sorted(df_1h["Q4_direction"].dropna().unique().tolist()),
             horizontal=False
         )
-    with row1_cols[4]:
+    
+    # — Row 2 —
+    row2_cols = st.columns(row2_widths)
+    with row2_cols[4]:
         orb_filter = st.radio(
             "0-5 ORB Direction",
             options=["All"] + sorted(df_1h["0_5_ORB_direction"].dropna().unique().tolist()),
             horizontal=False
         )
-    with row1_cols[5]:
+    with row2_cols[5]:
         orb_true_filter = st.radio(
             "0-5 ORB True/False",
             options=["All"] + [True, False],
             horizontal=False
         )
-    
-    # — Row 2 —
-    row2_cols = st.columns(row2_widths)
     with row2_cols[0]:
         orb_filter_5_10 = st.radio(
             "5-10 ORB Direction",
