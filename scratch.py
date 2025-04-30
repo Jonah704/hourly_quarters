@@ -185,9 +185,12 @@ if df_1h is not None:
             horizontal=False
         )
     with row2_cols[3]:
-        orb_size_filter_5_10 = st.radio(
+        orb_size_filter = st.radio(
             "0-5 ORB Body / Wicks",
-            options=["All"] + ["0% x < 25%", "25% x <50%", "50% x < 75%", "75% x < 100%"],
+            options=["All"] + [
+                '0% ≥ x > 25%', '25% ≥ x > 50%',
+                '50% ≥ x > 75%', '75% ≥ x > 100%'
+            ],
             horizontal=False
         )
     with row2_cols[4]:
@@ -211,7 +214,10 @@ if df_1h is not None:
     with row2_cols[7]:
         orb_size_filter_5_10 = st.radio(
             "5-10 ORB Body / Wicks",
-            options=["All"] + ["0% x < 25%", "25% x <50%", "50% x < 75%", "75% x < 100%"],
+            options=["All"] + [
+                '0% ≥ x > 25%', '25% ≥ x > 50%',
+                '50% ≥ x > 75%', '75% ≥ x > 100%'
+            ],
             horizontal=False
         )
 
@@ -246,12 +252,43 @@ if df_1h is not None:
         filtered_df_1h = filtered_df_1h[filtered_df_1h['0_5_ORB_valid'] == orb_true_filter] 
     if orb_conf_filter != 'All':
         filtered_df_1h = filtered_df_1h[filtered_df_1h['0_5_ORB_conf_bucket'] == orb_conf_filter] 
+
+    if orb_size_filter != 'All':
+
+        if hourly_open_position == '0% >= x > 25%':
+            filtered_df_1h = filtered_df_1h[(filtered_df_1h['0_5_ORB_body_size'] >= 0) &
+                                            (filtered_df_1h['0_5_ORB_body_size'] < 0.25)] 
+        if hourly_open_position == '25% >= x > 50%':
+            filtered_df_1h = filtered_df_1h[(filtered_df_1h['0_5_ORB_body_size'] >= 0.25) &
+                                            (filtered_df_1h['0_5_ORB_body_size'] < 0.50)] 
+        if hourly_open_position == '50% >= x > 75%':
+            filtered_df_1h = filtered_df_1h[(filtered_df_1h['0_5_ORB_body_size'] >= 0.50) &
+                                            (filtered_df_1h['0_5_ORB_body_size'] < 0.75)] 
+        if hourly_open_position == '75% >= x > 100%':
+            filtered_df_1h = filtered_df_1h[(filtered_df_1h['0_5_ORB_body_size'] >= 0.75) &
+                                            (filtered_df_1h['0_5_ORB_body_size'] < 1.00)] 
+    
     if orb_filter_5_10 != 'All':
         filtered_df_1h = filtered_df_1h[filtered_df_1h['5_10_ORB_direction'] == orb_filter_5_10] 
     if orb_true_filter_5_10 != 'All':
         filtered_df_1h = filtered_df_1h[filtered_df_1h['5_10_ORB_valid'] == orb_true_filter_5_10] 
     if orb_conf_filter_5_10 != 'All':
         filtered_df_1h = filtered_df_1h[filtered_df_1h['5_10_ORB_conf_bucket'] == orb_conf_filter_5_10] 
+
+    if orb_size_filter_5_10 != 'All':
+
+        if hourly_open_position == '0% >= x > 25%':
+            filtered_df_1h = filtered_df_1h[(filtered_df_1h['5_10_ORB_body_size'] >= 0) &
+                                            (filtered_df_1h['5_10_ORB_body_size'] < 0.25)] 
+        if hourly_open_position == '25% >= x > 50%':
+            filtered_df_1h = filtered_df_1h[(filtered_df_1h['5_10_ORB_body_size'] >= 0.25) &
+                                            (filtered_df_1h['5_10_ORB_body_size'] < 0.50)] 
+        if hourly_open_position == '50% >= x > 75%':
+            filtered_df_1h = filtered_df_1h[(filtered_df_1h['5_10_ORB_body_size'] >= 0.50) &
+                                            (filtered_df_1h['5_10_ORB_body_size'] < 0.75)] 
+        if hourly_open_position == '75% >= x > 100%':
+            filtered_df_1h = filtered_df_1h[(filtered_df_1h['5_10_ORB_body_size'] >= 0.75) &
+                                            (filtered_df_1h['5_10_ORB_body_size'] < 1.00)] 
         
     if hourly_open_position != 'All':
 
