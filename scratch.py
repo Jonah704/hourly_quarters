@@ -103,17 +103,12 @@ if df_1h is not None:
     selected_day = st.sidebar.selectbox("Day of Week", day_options)
     selected_quarter_measurement = st.sidebar.selectbox("Measure Quarter From", ["Hourly Open", "Quarterly Open"])
 
-    # Centered line with four Q-direction dropdowns
-    # your original widths for all 12 widgets
-    widths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]   # last 6
-    
-    # split into two rows
-    mid = len(widths) // 2
-    row1_widths = widths[:mid]   # [0.75, ..., 0.75] ×6
-    row2_widths = widths[mid:]   # [0.75, 0.8, 1.1, 0.7, 0.7, 1.5]
+
+
+    #Filters
     
     # — Row 1 —
-    row1_cols = st.columns(row1_widths)
+    row1_cols = st.columns([1, 1, 1, 1, 1, 1, 1, 1])
     with row1_cols[0]:
         q1_filter = st.radio(
             "Q1",
@@ -171,7 +166,7 @@ if df_1h is not None:
         )
     
     # — Row 2 —
-    row2_cols = st.columns(row2_widths)
+    row2_cols = st.columns([1, 1, 1])
     with row2_cols[0]:
         orb_filter = st.radio(
             "0-5 ORB Direction",
