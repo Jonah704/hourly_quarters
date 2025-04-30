@@ -222,7 +222,6 @@ if df_1h is not None:
 
     ###  Apply Filters
     filtered_df_1h = df_1h[df_1h['Instrument'] == selected_instrument]
-    filtered_df_1h['prev_hour_direction'] = filtered_df_1h['hour_direction'].shift(1)
 
     # Optional: Apply hour filter (if it's not "All")
     if selected_hour != 'All':
