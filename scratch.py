@@ -181,7 +181,7 @@ if df_1h is not None:
     with row2_cols[2]:
         orb_conf_filter = st.radio(
             "0-5 ORB Conf. Quarter",
-            options=["All"] + ["Q1", "Q2", "q3", "Q4"],
+            options=["All"] + ["Q1", "Q2", "Q3", "Q4"],
             horizontal=False
         )
     with row2_cols[3]:
@@ -199,7 +199,7 @@ if df_1h is not None:
     with row2_cols[5]:
         orb_conf_filter_5_10 = st.radio(
             "5-10 ORB Conf. Quarter",
-            options=["All"] + ["Q1", "Q2", "q3", "Q4"],
+            options=["All"] + ["Q1", "Q2", "Q3", "Q4"],
             horizontal=False
         )
 
