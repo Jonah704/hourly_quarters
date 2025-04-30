@@ -180,7 +180,7 @@ if df_1h is not None:
         )
     with row2_cols[2]:
         orb_conf_time = st.radio(
-            "0-5 ORB Confirmation Quarter",
+            "0-5 ORB Conf. Quarter",
             options=["All"] + ["Q1", "Q2", "q3", "Q4"],
             horizontal=False
         )
@@ -198,7 +198,7 @@ if df_1h is not None:
         )
     with row2_cols[5]:
         orb_conf_time_5_10 = st.radio(
-            "5-10 ORB Confirmation Quarter",
+            "5-10 ORB Conf. Quarter",
             options=["All"] + ["Q1", "Q2", "q3", "Q4"],
             horizontal=False
         )
