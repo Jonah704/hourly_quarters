@@ -182,14 +182,16 @@ if df_1h is not None:
         filtered_df_1h = filtered_df_1h[filtered_df_1h['day_of_week'] == selected_day]
 
     # Filter by Q directions
+    quarter_col_label = '_direction' if selected_quarter_measurement=="Quarterly Open" else "_direction_from_open"
+    
     if q1_filter != "All":
-        filtered_df_1h = filtered_df_1h[filtered_df_1h['Q1_direction'] == q1_filter]
+        filtered_df_1h = filtered_df_1h[filtered_df_1h[f'Q1_{quarter_col_label}'] == q1_filter]
     if q2_filter != "All":
-        filtered_df_1h = filtered_df_1h[filtered_df_1h['Q2_direction'] == q2_filter]
+        filtered_df_1h = filtered_df_1h[filtered_df_1h[f'Q2_{quarter_col_label}'] == q2_filter]
     if q3_filter != "All":
-        filtered_df_1h = filtered_df_1h[filtered_df_1h['Q3_direction'] == q3_filter]
+        filtered_df_1h = filtered_df_1h[filtered_df_1h[f'Q3_{quarter_col_label}'] == q3_filter]
     if q4_filter != "All":
-        filtered_df_1h = filtered_df_1h[filtered_df_1h['Q4_direction'] == q4_filter]
+        filtered_df_1h = filtered_df_1h[filtered_df_1h[f'Q4_{quarter_col_label}' == q4_filter]
     if orb_filter != 'All':
         filtered_df_1h = filtered_df_1h[filtered_df_1h['0_5_ORB_direction'] == orb_filter] 
     if orb_true_filter != 'All':
