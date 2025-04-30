@@ -233,13 +233,13 @@ if df_1h is not None:
     if orb_true_filter != 'All':
         filtered_df_1h = filtered_df_1h[filtered_df_1h['0_5_ORB_valid'] == orb_true_filter] 
     if orb_conf_filter != 'All':
-        filtered_df_1h = filtered_df_1h[filtered_df_1h['0_5_ORB_conf_time'] == orb_conf_filter] 
+        filtered_df_1h = filtered_df_1h[filtered_df_1h['0_5_ORB_conf_bucket'] == orb_conf_filter] 
     if orb_filter_5_10 != 'All':
         filtered_df_1h = filtered_df_1h[filtered_df_1h['5_10_ORB_direction'] == orb_filter_5_10] 
     if orb_true_filter_5_10 != 'All':
         filtered_df_1h = filtered_df_1h[filtered_df_1h['5_10_ORB_valid'] == orb_true_filter_5_10] 
     if orb_conf_filter_5_10 != 'All':
-        filtered_df_1h = filtered_df_1h[filtered_df_1h['5_10_ORB_conf_time'] == orb_conf_filter_5_10] 
+        filtered_df_1h = filtered_df_1h[filtered_df_1h['5_10_ORB_conf_bucket'] == orb_conf_filter_5_10] 
         
     if hourly_open_position != 'All':
 
