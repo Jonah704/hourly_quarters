@@ -166,7 +166,7 @@ if df_1h is not None:
 
     
     # — Row 2 —
-    row2_cols = st.columns([1, 1, 1])
+    row2_cols = st.columns([1, 1, 1, 1])
     with row2_cols[0]:
         orb_filter = st.radio(
             "0-5 ORB Direction",
