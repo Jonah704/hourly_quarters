@@ -192,7 +192,7 @@ if df_1h is not None:
     with row2_cols[3]:
         orb_size_filter = st.radio(
             "0-5 ORB Body / Wicks",
-            options=["All"] + list(SIZE_BINS_0_5.keys())
+            options=["All"] + list(SIZE_BINS_0_5.keys()),
             horizontal=False
         )
     with row2_cols[4]:
