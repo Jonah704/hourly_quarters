@@ -309,6 +309,14 @@ if df_1h is not None:
             label="0–5 ORB True Rate",
             value=f"{rate0_5:.2%}"
         )
+    # 0–5 ORB Return To Hourly Open
+    if '0_5_ORB_retrace_to_hourly_open' in filtered_df_1h.columns and not filtered_df_1h.empty:
+        orb0_5_hourly_hit = filtered_df_1h['0_5_ORB_retrace_to_hourly_open'].value_counts(normalize=True)
+        rateorb0_5_hourly_hit = orb0_5_hourly_hit.get(True, 0)
+        col0.metric(
+            label="0-5 Retrace to Hourly Open After Conf.,
+            value=f"{rate0_5:.2%}"
+        )
     
     # 5–10 ORB True Rate
     if '5_10_ORB_valid' in filtered_df_1h.columns and not filtered_df_1h.empty:
@@ -317,6 +325,15 @@ if df_1h is not None:
         col1.metric(
             label="5–10 ORB True Rate",
             value=f"{rate5_10:.2%}"
+        )
+
+    # 0–5 ORB Return To Hourly Open
+    if '5_10_ORB_retrace_to_hourly_open' in filtered_df_1h.columns and not filtered_df_1h.empty:
+        orb5_10_hourly_hit = filtered_df_1h['5_10_ORB_retrace_to_hourly_open'].value_counts(normalize=True)
+        rateorb5_10_hourly_hit = orb5_10_hourly_hit.get(True, 0)
+        col0.metric(
+            label="5-10 Retrace to Hourly Open After Conf.,
+            value=f"{rate0_5:.2%}"
         )
 
     # Calculate probability distributions for "low bucket" and "high bucket"
