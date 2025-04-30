@@ -182,7 +182,7 @@ if df_1h is not None:
         filtered_df_1h = filtered_df_1h[filtered_df_1h['day_of_week'] == selected_day]
 
     # Filter by Q directions
-    quarter_col_label = '_direction' if selected_quarter_measurement=="Quarterly Open" else "_direction_from_open"
+    quarter_col_label = 'direction' if selected_quarter_measurement=="Quarterly Open" else "direction_from_open"
     
     if q1_filter != "All":
         filtered_df_1h = filtered_df_1h[filtered_df_1h[f'Q1_{quarter_col_label}'] == q1_filter]
