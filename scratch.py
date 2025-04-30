@@ -138,34 +138,43 @@ if df_1h is not None:
             options=["All"] + sorted(df_1h["Q4_direction"].dropna().unique().tolist()),
             horizontal=False
         )
+    with row1_cols[4]:
+        low_filter = st.multiselect(
+            "Low Exclusion",
+            options=sorted(df_1h["low_bucket"].dropna().unique().tolist())
+        )
+        high_filter = st.multiselect(
+            "High Exclusion",
+            options=sorted(df_1h["high_bucket"].dropna().unique().tolist())
+        )
     
     # — Row 2 —
     row2_cols = st.columns(row2_widths)
-    with row2_cols[4]:
+    with row2_cols[0]:
         orb_filter = st.radio(
             "0-5 ORB Direction",
             options=["All"] + sorted(df_1h["0_5_ORB_direction"].dropna().unique().tolist()),
             horizontal=False
         )
-    with row2_cols[5]:
+    with row2_cols[1]:
         orb_true_filter = st.radio(
             "0-5 ORB True/False",
             options=["All"] + [True, False],
             horizontal=False
         )
-    with row2_cols[0]:
+    with row2_cols[2]:
         orb_filter_5_10 = st.radio(
             "5-10 ORB Direction",
             options=["All"] + sorted(df_1h["5_10_ORB_direction"].dropna().unique().tolist()),
             horizontal=False
         )
-    with row2_cols[1]:
+    with row2_cols[3]:
         orb_true_filter_5_10 = st.radio(
             "5-10 ORB True/False",
             options=["All"] + [True, False],
             horizontal=False
         )
-    with row2_cols[2]:
+    with row2_cols[4]:
         hourly_open_position = st.radio(
             "Hourly Open Position",
             options=["All"] + [
@@ -174,26 +183,17 @@ if df_1h is not None:
             ],
             horizontal=False
         )
-    with row2_cols[3]:
+    with row2_cols[5]:
         phh_hit_time_filter = st.radio(
             "PHH Hit Time",
             options=["All"] + sorted(df_1h["phh_hit_bucket"].dropna().unique().tolist()),
             horizontal=False
         )
-    with row2_cols[4]:
+    with row2_cols[6]:
         phl_hit_time_filter = st.radio(
             "PHL Hit Time",
             options=["All"] + sorted(df_1h["phl_hit_bucket"].dropna().unique().tolist()),
             horizontal=False
-        )
-    with row2_cols[5]:
-        low_filter = st.multiselect(
-            "Low Exclusion",
-            options=sorted(df_1h["low_bucket"].dropna().unique().tolist())
-        )
-        high_filter = st.multiselect(
-            "High Exclusion",
-            options=sorted(df_1h["high_bucket"].dropna().unique().tolist())
         )
 
     ###  Apply Filters
