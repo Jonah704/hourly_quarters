@@ -104,60 +104,90 @@ if df_1h is not None:
     selected_quarter_measurement = st.sidebar.selectbox("Measure Quarter From", ["Hourly Open", "Quarterly Open"])
 
     # Centered line with four Q-direction dropdowns
-    st.markdown("### Hour Filters")
-    q_col1, q_col2, q_col3, q_col4, q_col5, q_col6, q_col7, q_col8, q_col9, q_col10, q_col11, q_col12 = st.columns([0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.8, 1.1, 0.7, 0.7, 1.5])  # Extra column for centering
-
-    q1_filter = q_col1.radio(
-        "Q1",
-        options=["All"] + sorted(df_1h["Q1_direction"].dropna().unique().tolist()),
-        horizontal=False
-    )
-    q2_filter = q_col2.radio(
-        "Q2",
-        options=["All"] + sorted(df_1h["Q2_direction"].dropna().unique().tolist()),
-        horizontal=False
-    )
-    q3_filter = q_col3.radio(
-        "Q3",
-        options=["All"] + sorted(df_1h["Q3_direction"].dropna().unique().tolist()),
-        horizontal=False
-    )
-    q4_filter = q_col4.radio(
-        "Q4",
-        options=["All"] + sorted(df_1h["Q4_direction"].dropna().unique().tolist()),
-        horizontal=False
-    )
+    # your original widths for all 12 widgets
+    widths = [0.75, 0.75, 0.75, 0.75, 0.75, 0.75,   # first 6
+              0.75, 0.8,  1.1,  0.7,  0.7,  1.5]   # last 6
     
-    orb_filter = q_col5.radio("0-5 ORB Direction",
-                              options=["All"] + sorted(df_1h["0_5_ORB_direction"].dropna().unique().tolist()),
-                              horizontal=False)
-    orb_true_filter = q_col6.radio("0-5 ORB True/False",
-                              options=["All"] + [True, False],
-                              horizontal=False)
-
-    orb_filter_5_10 = q_col7.radio("5-10 ORB Direction",
-                              options=["All"] + sorted(df_1h["5_10_ORB_direction"].dropna().unique().tolist()),
-                              horizontal=False)
+    # split into two rows
+    mid = len(widths) // 2
+    row1_widths = widths[:mid]   # [0.75, ..., 0.75] ×6
+    row2_widths = widths[mid:]   # [0.75, 0.8, 1.1, 0.7, 0.7, 1.5]
     
-    orb_true_filter_5_10 = q_col8.radio("5-10 ORB True/False",
-                              options=["All"] + [True, False],
-                              horizontal=False)
-
-    hourly_open_position = q_col9.radio("Hourly Open Position",
-                              options=["All"] + ['0% >= x > 25%', '25% >= x > 50%', '50% >= x > 75%', '75% >= x > 100%'],
-                              horizontal=False)
-
-    phh_hit_time_filter = q_col10.radio("PHH Hit Time",
-                        options=["All"] + sorted(df_1h["phh_hit_bucket"].dropna().unique().tolist()),
-                        horizontal=False,
-                        )
-    phl_hit_time_filter = q_col11.radio("PHL Hit Time",
-                        options=["All"] + sorted(df_1h["phl_hit_bucket"].dropna().unique().tolist()),
-                        horizontal=False,
-                        )
+    # — Row 1 —
+    row1_cols = st.columns(row1_widths)
+    with row1_cols[0]:
+        q1_filter = st.radio(
+            "Q1",
+            options=["All"] + sorted(df_1h["Q1_direction"].dropna().unique().tolist()),
+            horizontal=False
+        )
+    with row1_cols[1]:
+        q2_filter = st.radio(
+            "Q2",
+            options=["All"] + sorted(df_1h["Q2_direction"].dropna().unique().tolist()),
+            horizontal=False
+        )
+    with row1_cols[2]:
+        q3_filter = st.radio(
+            "Q3",
+            options=["All"] + sorted(df_1h["Q3_direction"].dropna().unique().tolist()),
+            horizontal=False
+        )
+    with row1_cols[3]:
+        q4_filter = st.radio(
+            "Q4",
+            options=["All"] + sorted(df_1h["Q4_direction"].dropna().unique().tolist()),
+            horizontal=False
+        )
+    with row1_cols[4]:
+        orb_filter = st.radio(
+            "0-5 ORB Direction",
+            options=["All"] + sorted(df_1h["0_5_ORB_direction"].dropna().unique().tolist()),
+            horizontal=False
+        )
+    with row1_cols[5]:
+        orb_true_filter = st.radio(
+            "0-5 ORB True/False",
+            options=["All"] + [True, False],
+            horizontal=False
+        )
     
-    
-    with q_col12:
+    # — Row 2 —
+    row2_cols = st.columns(row2_widths)
+    with row2_cols[0]:
+        orb_filter_5_10 = st.radio(
+            "5-10 ORB Direction",
+            options=["All"] + sorted(df_1h["5_10_ORB_direction"].dropna().unique().tolist()),
+            horizontal=False
+        )
+    with row2_cols[1]:
+        orb_true_filter_5_10 = st.radio(
+            "5-10 ORB True/False",
+            options=["All"] + [True, False],
+            horizontal=False
+        )
+    with row2_cols[2]:
+        hourly_open_position = st.radio(
+            "Hourly Open Position",
+            options=["All"] + [
+                '0% ≥ x > 25%', '25% ≥ x > 50%',
+                '50% ≥ x > 75%', '75% ≥ x > 100%'
+            ],
+            horizontal=False
+        )
+    with row2_cols[3]:
+        phh_hit_time_filter = st.radio(
+            "PHH Hit Time",
+            options=["All"] + sorted(df_1h["phh_hit_bucket"].dropna().unique().tolist()),
+            horizontal=False
+        )
+    with row2_cols[4]:
+        phl_hit_time_filter = st.radio(
+            "PHL Hit Time",
+            options=["All"] + sorted(df_1h["phl_hit_bucket"].dropna().unique().tolist()),
+            horizontal=False
+        )
+    with row2_cols[5]:
         low_filter = st.multiselect(
             "Low Exclusion",
             options=sorted(df_1h["low_bucket"].dropna().unique().tolist())
