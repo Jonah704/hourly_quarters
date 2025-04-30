@@ -134,6 +134,27 @@ if df_1h is not None:
             horizontal=False
         )
     with row1_cols[4]:
+        hourly_open_position = st.radio(
+            "Hourly Open Position",
+            options=["All"] + [
+                '0% ≥ x > 25%', '25% ≥ x > 50%',
+                '50% ≥ x > 75%', '75% ≥ x > 100%'
+            ],
+            horizontal=False
+        )
+    with row1_cols[5]:
+        phh_hit_time_filter = st.radio(
+            "PHH Hit Time",
+            options=["All"] + sorted(df_1h["phh_hit_bucket"].dropna().unique().tolist()),
+            horizontal=False
+        )
+    with row1_cols[6]:
+        phl_hit_time_filter = st.radio(
+            "PHL Hit Time",
+            options=["All"] + sorted(df_1h["phl_hit_bucket"].dropna().unique().tolist()),
+            horizontal=False
+        )
+    with row1_cols[7]:
         low_filter = st.multiselect(
             "Low Exclusion",
             options=sorted(df_1h["low_bucket"].dropna().unique().tolist())
@@ -143,27 +164,6 @@ if df_1h is not None:
             options=sorted(df_1h["high_bucket"].dropna().unique().tolist())
         )
 
-    with row1_cols[5]:
-        hourly_open_position = st.radio(
-            "Hourly Open Position",
-            options=["All"] + [
-                '0% ≥ x > 25%', '25% ≥ x > 50%',
-                '50% ≥ x > 75%', '75% ≥ x > 100%'
-            ],
-            horizontal=False
-        )
-    with row1_cols[6]:
-        phh_hit_time_filter = st.radio(
-            "PHH Hit Time",
-            options=["All"] + sorted(df_1h["phh_hit_bucket"].dropna().unique().tolist()),
-            horizontal=False
-        )
-    with row1_cols[7]:
-        phl_hit_time_filter = st.radio(
-            "PHL Hit Time",
-            options=["All"] + sorted(df_1h["phl_hit_bucket"].dropna().unique().tolist()),
-            horizontal=False
-        )
     
     # — Row 2 —
     row2_cols = st.columns([1, 1, 1])
