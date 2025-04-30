@@ -255,16 +255,16 @@ if df_1h is not None:
 
     if orb_size_filter != 'All':
 
-        if hourly_open_position == '0% >= x > 25%':
+        if orb_size_filter == '0% >= x > 25%':
             filtered_df_1h = filtered_df_1h[(filtered_df_1h['0_5_ORB_body_size'] >= 0) &
                                             (filtered_df_1h['0_5_ORB_body_size'] < 0.25)] 
-        if hourly_open_position == '25% >= x > 50%':
+        if orb_size_filter == '25% >= x > 50%':
             filtered_df_1h = filtered_df_1h[(filtered_df_1h['0_5_ORB_body_size'] >= 0.25) &
                                             (filtered_df_1h['0_5_ORB_body_size'] < 0.50)] 
-        if hourly_open_position == '50% >= x > 75%':
+        if orb_size_filter == '50% >= x > 75%':
             filtered_df_1h = filtered_df_1h[(filtered_df_1h['0_5_ORB_body_size'] >= 0.50) &
                                             (filtered_df_1h['0_5_ORB_body_size'] < 0.75)] 
-        if hourly_open_position == '75% >= x > 100%':
+        if orb_size_filter == '75% >= x > 100%':
             filtered_df_1h = filtered_df_1h[(filtered_df_1h['0_5_ORB_body_size'] >= 0.75) &
                                             (filtered_df_1h['0_5_ORB_body_size'] < 1.00)] 
     
@@ -277,16 +277,16 @@ if df_1h is not None:
 
     if orb_size_filter_5_10 != 'All':
 
-        if hourly_open_position == '0% >= x > 25%':
+        if orb_size_filter_5_10 == '0% >= x > 25%':
             filtered_df_1h = filtered_df_1h[(filtered_df_1h['5_10_ORB_body_size'] >= 0) &
                                             (filtered_df_1h['5_10_ORB_body_size'] < 0.25)] 
-        if hourly_open_position == '25% >= x > 50%':
+        if orb_size_filter_5_10 == '25% >= x > 50%':
             filtered_df_1h = filtered_df_1h[(filtered_df_1h['5_10_ORB_body_size'] >= 0.25) &
                                             (filtered_df_1h['5_10_ORB_body_size'] < 0.50)] 
-        if hourly_open_position == '50% >= x > 75%':
+        if orb_size_filter_5_10 == '50% >= x > 75%':
             filtered_df_1h = filtered_df_1h[(filtered_df_1h['5_10_ORB_body_size'] >= 0.50) &
                                             (filtered_df_1h['5_10_ORB_body_size'] < 0.75)] 
-        if hourly_open_position == '75% >= x > 100%':
+        if orb_size_filter_5_10 == '75% >= x > 100%':
             filtered_df_1h = filtered_df_1h[(filtered_df_1h['5_10_ORB_body_size'] >= 0.75) &
                                             (filtered_df_1h['5_10_ORB_body_size'] < 1.00)] 
         
