@@ -299,7 +299,7 @@ if df_1h is not None:
         filtered_df_1h = filtered_df_1h[~filtered_df_1h['high_bucket'].isin(high_filter)]
 
     # Create two side-by-side columns
-    col0, col1, _ = st.columns([1, 1, 8])
+    col0, col1, col2, col3 = st.columns([1, 1, 1, 1, 7])
     
     # 0–5 ORB True Rate
     if '0_5_ORB_valid' in filtered_df_1h.columns and not filtered_df_1h.empty:
@@ -313,7 +313,7 @@ if df_1h is not None:
     if '0_5_ORB_retrace_to_hourly_open' in filtered_df_1h.columns and not filtered_df_1h.empty:
         orb0_5_hourly_hit = filtered_df_1h['0_5_ORB_retrace_to_hourly_open'].value_counts(normalize=True)
         rateorb0_5_hourly_hit = orb0_5_hourly_hit.get(True, 0)
-        col0.metric(
+        col1.metric(
             label="0-5 Retrace to Hourly Open After Conf.",
             value=f"{rate0_5:.2%}"
         )
@@ -322,7 +322,7 @@ if df_1h is not None:
     if '5_10_ORB_valid' in filtered_df_1h.columns and not filtered_df_1h.empty:
         orb5_10 = filtered_df_1h['5_10_ORB_valid'].value_counts(normalize=True)
         rate5_10 = orb5_10.get(True, 0)
-        col1.metric(
+        col2.metric(
             label="5–10 ORB True Rate",
             value=f"{rate5_10:.2%}"
         )
@@ -331,7 +331,7 @@ if df_1h is not None:
     if '5_10_ORB_retrace_to_hourly_open' in filtered_df_1h.columns and not filtered_df_1h.empty:
         orb5_10_hourly_hit = filtered_df_1h['5_10_ORB_retrace_to_hourly_open'].value_counts(normalize=True)
         rateorb5_10_hourly_hit = orb5_10_hourly_hit.get(True, 0)
-        col0.metric(
+        col3.metric(
             label="5-10 Retrace to Hourly Open After Conf.",
             value=f"{rate0_5:.2%}"
         )
