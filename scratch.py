@@ -179,7 +179,7 @@ if df_1h is not None:
             horizontal=False
         )
     with row2_cols[2]:
-        orb_conf_time = st.radio(
+        orb_conf_filter = st.radio(
             "0-5 ORB Conf. Quarter",
             options=["All"] + ["Q1", "Q2", "q3", "Q4"],
             horizontal=False
@@ -197,7 +197,7 @@ if df_1h is not None:
             horizontal=False
         )
     with row2_cols[5]:
-        orb_conf_time_5_10 = st.radio(
+        orb_conf_filter_5_10 = st.radio(
             "5-10 ORB Conf. Quarter",
             options=["All"] + ["Q1", "Q2", "q3", "Q4"],
             horizontal=False
@@ -232,10 +232,14 @@ if df_1h is not None:
         filtered_df_1h = filtered_df_1h[filtered_df_1h['0_5_ORB_direction'] == orb_filter] 
     if orb_true_filter != 'All':
         filtered_df_1h = filtered_df_1h[filtered_df_1h['0_5_ORB_valid'] == orb_true_filter] 
+    if orb_conf_filter != 'All':
+        filtered_df_1h = filtered_df_1h[filtered_df_1h['0_5_ORB_conf_time'] == orb_conf_filter] 
     if orb_filter_5_10 != 'All':
         filtered_df_1h = filtered_df_1h[filtered_df_1h['5_10_ORB_direction'] == orb_filter_5_10] 
     if orb_true_filter_5_10 != 'All':
         filtered_df_1h = filtered_df_1h[filtered_df_1h['5_10_ORB_valid'] == orb_true_filter_5_10] 
+    if orb_conf_filter_5_10 != 'All':
+        filtered_df_1h = filtered_df_1h[filtered_df_1h['5_10_ORB_conf_time'] == orb_conf_filter_5_10] 
         
     if hourly_open_position != 'All':
 
