@@ -7,7 +7,7 @@ st.set_page_config(layout='wide')
 
 # 1) Define a cached loader
 @st.cache_data
-def load_quartal(urls, version="v2"):   # <- bump this string to invalidate
+def load_quartal(urls, version="v3"):   # <- bump this string to invalidate
     dfs = []
     for url in urls:
         df = pd.read_csv(url)
@@ -20,7 +20,7 @@ def load_quartal(urls, version="v2"):   # <- bump this string to invalidate
 
 # 2) Call the loader for 1H and 3H data
 url_1h_eq   = "https://raw.githubusercontent.com/TuckerArrants/hourly_quarters/main/ES_NQ_YM_Hourly_Quartal_1min_Processed_from_2016.csv"
-url_1h_comm = "https://raw.githubusercontent.com/TuckerArrants/hourly_quarters/main/CL_GC_Hourly_Quartal_1min_Processed_from_2016.csv"
+url_1h_comm = "https://raw.githubusercontent.com/TuckerArrants/hourly_quarters/main/CL_GC_NG_SI_Hourly_Quartal_1min_Processed_from_2016.csv"
 url_3h_eq   = "https://raw.githubusercontent.com/TuckerArrants/hourly_quarters/main/ES_NQ_YM_3H_Quartal_1min_Processed_from_2016.csv"
 url_3h_comm = "https://raw.githubusercontent.com/TuckerArrants/hourly_quarters/main/CL_GC_3H_Quartal_1min_Processed_from_2016.csv"
 
@@ -52,8 +52,11 @@ if not st.session_state["authenticated"]:
         if username in USER_CREDENTIALS and password == USER_CREDENTIALS[username]:
             st.session_state["authenticated"] = True
             st.session_state["username"] = username  # Store the username
-            st.success(f"Welcome, {username}! Redirecting...")
-            st.rerun()  # Refresh to load the dashboard
+            # ← Clear *all* @st.cache_data caches here:
+            st.cache_data.clear()
+
+            st.success(f"Welcome, {username}! Loading fresh data…")
+            st.rerun()
         else:
             st.error("Incorrect username or password. Please try again.")
 
@@ -98,6 +101,7 @@ if df_1h is not None:
     selected_three_hour = st.sidebar.selectbox("Select 3H Start", three_hour_options)
     day_options = ['All'] + ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
     selected_day = st.sidebar.selectbox("Day of Week", day_options)
+    selected_quarter_measurement = st.sidebar.selectbox("Measure Quarter From", ["Hourly Open", "Quarterly Open"])
 
     # Centered line with four Q-direction dropdowns
     st.markdown("### Hour Filters")
@@ -178,14 +182,16 @@ if df_1h is not None:
         filtered_df_1h = filtered_df_1h[filtered_df_1h['day_of_week'] == selected_day]
 
     # Filter by Q directions
+    quarter_col_label = 'direction' if selected_quarter_measurement=="Quarterly Open" else "direction_from_open"
+    
     if q1_filter != "All":
-        filtered_df_1h = filtered_df_1h[filtered_df_1h['Q1_direction'] == q1_filter]
+        filtered_df_1h = filtered_df_1h[filtered_df_1h[f'Q1_{quarter_col_label}'] == q1_filter]
     if q2_filter != "All":
-        filtered_df_1h = filtered_df_1h[filtered_df_1h['Q2_direction'] == q2_filter]
+        filtered_df_1h = filtered_df_1h[filtered_df_1h[f'Q2_{quarter_col_label}'] == q2_filter]
     if q3_filter != "All":
-        filtered_df_1h = filtered_df_1h[filtered_df_1h['Q3_direction'] == q3_filter]
+        filtered_df_1h = filtered_df_1h[filtered_df_1h[f'Q3_{quarter_col_label}'] == q3_filter]
     if q4_filter != "All":
-        filtered_df_1h = filtered_df_1h[filtered_df_1h['Q4_direction'] == q4_filter]
+        filtered_df_1h = filtered_df_1h[filtered_df_1h[f'Q4_{quarter_col_label}'] == q4_filter]
     if orb_filter != 'All':
         filtered_df_1h = filtered_df_1h[filtered_df_1h['0_5_ORB_direction'] == orb_filter] 
     if orb_true_filter != 'All':
