@@ -12,7 +12,8 @@ def load_quartal(urls, version="v3"):   # <- bump this string to invalidate
     for url in urls:
         df = pd.read_csv(url)
         df = df.drop(columns=[
-            'Unnamed: 0','Unnamed: 0.1','phh_hit_time','phl_hit_time','date'
+            'Unnamed: 0','Unnamed: 0.1','phh_hit_time','phl_hit_time','date',
+            #'0_5_ORB_conf_time', '5_10_ORB_conf_time'
         ], errors='ignore')
         dfs.append(df)
     full = pd.concat(dfs, ignore_index=True)
@@ -75,8 +76,9 @@ if st.sidebar.button("Logout"):
 
 for col in [
     'Instrument','Q1_direction','Q2_direction','Q3_direction','Q4_direction',
-    '0_5_ORB_direction','0_5_ORB_valid',
-    '5_10_ORB_direction','5_10_ORB_valid',
+    'Q1_direction_from_open','Q2_direction_from_open','Q3_direction_from_open','Q4_direction_from_open'
+    '0_5_ORB_direction','0_5_ORB_valid', '0_5_ORB_conf_bucket',
+    '5_10_ORB_direction','5_10_ORB_valid', '5_10_ORB_conf_bucket',
     'hour_direction',
     'day_of_week','phh_hit_bucket','phl_hit_bucket',
     'low_bucket','high_bucket'
