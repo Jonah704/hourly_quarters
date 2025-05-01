@@ -83,8 +83,6 @@ for col in [
 ]:
     if col in df_1h:
         df_1h[col] = df_1h[col].astype('category')
-    if col in df_3h:
-        df_3h[col] = df_3h[col].astype('category')
 
 df_1h["three_hour_start"] = (df_1h["hour"] // 3) * 3
 
