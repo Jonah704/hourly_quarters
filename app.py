@@ -10,7 +10,7 @@ def load_quartal_for_instrument(instrument: str, period: str = "1H") -> pd.DataF
     """
     Load the 1-minute quartal file for a single instrument.
     period must be "1H" or "3H".
-    """
+    """ 
     base = "https://raw.githubusercontent.com/TuckerArrants/hourly_quarters/main"
     if period == "1H":
         fname = f"{instrument}_Hourly_Quartal_1min_Processed_from_2008_downcast.csv"
@@ -279,7 +279,7 @@ if df_1h is not None:
         filtered_df_1h = filtered_df_1h[~filtered_df_1h['high_bucket'].isin(high_filter)]
 
     # Create two side-by-side columns
-    col0, col1, col2, col3, _ = st.columns([1.5, 3, 1.5, 3, 5])
+    col0, col1, col2, col3, col4, col5, col6, col7 = st.columns([3, 3, 3, 3, 3, 3, 3, 3])
     
     # 0–5 ORB True Rate
     if '0_5_ORB_valid' in filtered_df_1h.columns and not filtered_df_1h.empty:
@@ -314,6 +314,36 @@ if df_1h is not None:
         col3.metric(
             label="5-10 Retrace to Hourly Open After Conf.",
             value=f"{rate5_10_hourly_hit:.2%}"
+        )
+
+    if 'Q1_touched_open' in filtered_df_1h.columns and not filtered_df_1h.empty:
+        q1_hourly_hit = filtered_df_1h['Q1_touched_open'].value_counts(normalize=True)
+        rateq1_hourly_hit = q1_hourly_hit.get(True, 0)
+        col4.metric(
+            label="Q1 Hit Hourly Open",
+            value=f"{rateq1_hourly_hit:.2%}"
+        )
+
+    if 'Q2_touched_open' in filtered_df_1h.columns and not filtered_df_1h.empty:
+        q2_hourly_hit = filtered_df_1h['Q2_touched_open'].value_counts(normalize=True)
+        rateq2_hourly_hit = q2_hourly_hit.get(True, 0)
+        col5.metric(
+            label="Q2 Hit Hourly Open",
+            value=f"{rateq2_hourly_hit:.2%}"
+        )
+    if 'Q3_touched_open' in filtered_df_1h.columns and not filtered_df_1h.empty:
+        q3_hourly_hit = filtered_df_1h['Q3_touched_open'].value_counts(normalize=True)
+        rateq3_hourly_hit = q3_hourly_hit.get(True, 0)
+        col6.metric(
+            label="Q3 Hit Hourly Open",
+            value=f"{rateq3_hourly_hit:.2%}"
+        )
+    if 'Q4_touched_open' in filtered_df_1h.columns and not filtered_df_1h.empty:
+        q4_hourly_hit = filtered_df_1h['Q4_touched_open'].value_counts(normalize=True)
+        rateq4_hourly_hit = q4_hourly_hit.get(True, 0)
+        col7.metric(
+            label="Q4 Hit Hourly Open",
+            value=f"{rateq4_hourly_hit:.2%}"
         )
 
     # Calculate probability distributions for "low bucket" and "high bucket"
