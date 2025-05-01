@@ -5,31 +5,33 @@ import plotly.express as px
 
 st.set_page_config(layout='wide')
 
-# 1) Define a cached loader
 @st.cache_data
-def load_quartal_for_instrument(urls, instrument, version="v1"):
-    dfs = []
-    for url in urls:
-        df = pd.read_csv(url, usecols=None)          # load the whole chunk…
-        df = df[df["Instrument"] == instrument]      # …but immediately filter
-        if not df.empty:
-            dfs.append(df)
-    if not dfs:
-        return pd.DataFrame()                        # no rows for that instrument
-    return pd.concat(dfs, ignore_index=True)
+def load_quartal_for_instrument(instrument: str, period: str = "1H") -> pd.DataFrame:
+    """
+    Load the 1-minute quartal file for a single instrument.
+    period must be "1H" or "3H".
+    """
+    base = "https://raw.githubusercontent.com/TuckerArrants/hourly_quarters/main"
+    if period == "1H":
+        fname = f"{instrument}_Hourly_Quartal_1min_Processed_from_2008_downcast.csv"
+    elif period == "3H":
+        fname = f"{instrument}_3H_Quartal_1min_Processed_from_2016.csv"
+    else:
+        raise ValueError("period must be '1H' or '3H'")
+    url = f"{base}/{fname}"
+    try:
+        return pd.read_csv(url)
+    except Exception:
+        # fallback to empty DF if file not found or network hiccup
+        return pd.DataFrame()
 
 
-# 2) Call the loader for 1H and 3H data
-url_1h_eq   = "https://raw.githubusercontent.com/TuckerArrants/hourly_quarters/main/ES_NQ_YM_Hourly_Quartal_1min_Processed_from_2016.csv"
-url_1h_comm = "https://raw.githubusercontent.com/TuckerArrants/hourly_quarters/main/CL_GC_NG_SI_Hourly_Quartal_1min_Processed_from_2016.csv"
-url_3h_eq   = "https://raw.githubusercontent.com/TuckerArrants/hourly_quarters/main/ES_NQ_YM_3H_Quartal_1min_Processed_from_2016.csv"
-url_3h_comm = "https://raw.githubusercontent.com/TuckerArrants/hourly_quarters/main/CL_GC_3H_Quartal_1min_Processed_from_2016.csv"
-
-instrument_options = ["ES", "NQ", "YM", "CL", "GC", "NG", "SI"]  # or pull from a small manifest
+# ↓ in your sidebar:
+instrument_options = ["ES", "NQ", "YM", "CL", "GC", "NG", "SI", "E6", "FDAX"]
 selected_instrument = st.sidebar.selectbox("Instrument", instrument_options)
 
-df_1h = load_quartal_for_instrument([url_1h_eq, url_1h_comm], selected_instrument)
-df_3h = load_quartal_for_instrument([url_3h_eq, url_3h_comm], selected_instrument)
+# ↓ now pull exactly one file per timeframe:
+df_1h = load_quartal_for_instrument(selected_instrument, period="1H")
 
 # ✅ Store username-password pairs
 USER_CREDENTIALS = {
@@ -81,11 +83,6 @@ for col in [
 ]:
     if col in df_1h:
         df_1h[col] = df_1h[col].astype('category')
-    if col in df_3h:
-        df_3h[col] = df_3h[col].astype('category')
-
-df_1h["three_hour_start"] = (df_1h["hour"] // 3) * 3
-
 
 if df_1h is not None:
 
@@ -93,7 +90,6 @@ if df_1h is not None:
     hour_options.remove(17)
     three_hour_options = ['All'] + [0, 3, 6, 9, 12, 15, 18, 21]
     selected_hour = st.sidebar.selectbox("Select Hour", hour_options)
-    selected_three_hour = st.sidebar.selectbox("Select 3H Start", three_hour_options)
     day_options = ['All'] + ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
     selected_day = st.sidebar.selectbox("Day of Week", day_options)
     selected_quarter_measurement = st.sidebar.selectbox("Measure Quarter From", ["Hourly Open", "Quarterly Open"])
@@ -504,253 +500,3 @@ if df_1h is not None:
         q_cols[i].plotly_chart(fig_q, use_container_width=True)
 
     st.caption(f"Sample size: {len(filtered_df_1h):,} rows")
-
-
-if df_3h is not None:
-
-    # Centered line with four Q-direction dropdowns
-    st.markdown("### 3H Filters")
-    q_col1_3h, q_col2_3h, q_col3_3h, q_col4_3h, q_col5_3h, q_col6_3h, q_col7_3h, q_col8_3h, q_col9_3h, q_col10_3h, q_col11_3h = st.columns([0.75, 0.75, 0.75, 0.75, 0.8, 0.75, 0.8, 0.7, 0.7, 1.2, 1.5]) # Extra column for centering
-
-    q1_filter_3h = q_col1_3h.radio(
-        "Q1",
-        options=["All"] + sorted(df_3h["Q1_direction"].dropna().unique().tolist()),
-        horizontal=False,
-        key="q1_filter_3h"
-    )
-    q2_filter_3h = q_col2_3h.radio(
-        "Q2",
-        options=["All"] + sorted(df_3h["Q2_direction"].dropna().unique().tolist()),
-        horizontal=False,
-        key="q2_filter_3h"
-    )
-    q3_filter_3h = q_col3_3h.radio(
-        "Q3",
-        options=["All"] + sorted(df_3h["Q3_direction"].dropna().unique().tolist()),
-        horizontal=False,
-        key="q3_filter_3h"
-    )
-    q4_filter_3h = q_col4_3h.radio(
-        "Q4",
-        options=["All"] + sorted(df_3h["Q4_direction"].dropna().unique().tolist()),
-        horizontal=False,
-        key="q4_filter_3h"
-    )
-    
-    prev_hour_filter_3h = q_col5_3h.radio("Prev. 3H Direction",
-                                          options=["All"] + ["Long", "Short", "Neutral"],
-                                          horizontal=False,
-                                          key="prev_hour_filter_3h")
-    orb_filter_3h = q_col6_3h.radio("15m ORB Direction",
-                                    options=["All"] +sorted(df_3h["ORB_direction"].dropna().unique().tolist()),
-                                    horizontal=False,
-                                    key="orb_filter_3h")
-    orb_true_filter_3h = q_col7_3h.radio("15m ORB True/False",
-                                    options=["All"] +sorted(df_3h["ORB_valid"].dropna().unique().tolist()),
-                                    horizontal=False,
-                                    key="orb_true_3h")
-    period_open_position = q_col10_3h.radio("3H Open Position",
-                              options=["All"] + ['0% >= x > 25%', '25% >= x > 50%', '50% >= x > 75%', '75% >= x > 100%'],
-                              horizontal=False)
-
-    pph_hit_time_filter = q_col8_3h.radio("PPH Hit Time",
-                        options=["All"] + sorted(df_3h["phh_hit_bucket"].dropna().unique().tolist()),
-                        horizontal=False,
-                        )
-    ppl_hit_time_filter = q_col9_3h.radio("PPL Hit Time",
-                        options=["All"] + sorted(df_3h["phl_hit_bucket"].dropna().unique().tolist()),
-                        horizontal=False,
-                        )
-    
-
-    with q_col11_3h:
-        low_filter_3h = st.multiselect(
-            "Low Exclusion",
-            options=sorted(df_3h["low_bucket"].dropna().unique().tolist()),
-            key="low_filter_3h"
-        )
-        high_filter_3h = st.multiselect(
-            "High Exclusion",
-            options=sorted(df_3h["high_bucket"].dropna().unique().tolist()),
-            key="high_filter_3h"
-        )
-
-
-    ###  Apply Filters
-    filtered_df_3h = df_3h[df_3h['Instrument'] == selected_instrument]
-    filtered_df_3h['prev_three_hour_direction'] = filtered_df_3h['three_hour_direction'].shift(1)
-
-    # Optional: Apply hour filter (if it's not "All")
-    if selected_three_hour != 'All':
-        # Assumes you have a column like 'Hour' as int. If not, adapt accordingly.
-        filtered_df_3h = filtered_df_3h[filtered_df_3h['start_hour'] == selected_three_hour]
-
-    # Optional: Apply day filter (if it's not "All")
-    if selected_day != 'All':
-        # Assumes you have a column like 'Day' with string values like 'Monday'
-        filtered_df_3h = filtered_df_3h[filtered_df_3h['day_of_week'] == selected_day]
-
-    # Filter by Q directions
-    if q1_filter_3h != "All":
-        filtered_df_3h = filtered_df_3h[filtered_df_3h['Q1_direction'] == q1_filter_3h]
-    if q2_filter_3h != "All":
-        filtered_df_3h = filtered_df_3h[filtered_df_3h['Q2_direction'] == q2_filter_3h]
-    if q3_filter_3h != "All":
-        filtered_df_3h = filtered_df_3h[filtered_df_3h['Q3_direction'] == q3_filter_3h]
-    if q4_filter_3h != "All":
-        filtered_df_3h = filtered_df_3h[filtered_df_3h['Q4_direction'] == q4_filter_3h]
-    if prev_hour_filter_3h != 'All':
-        filtered_df_3h = filtered_df_3h[filtered_df_3h['prev_three_hour_direction'] == prev_hour_filter_3h] 
-    if orb_filter_3h != 'All':
-        filtered_df_3h = filtered_df_3h[filtered_df_3h['ORB_direction'] == orb_filter_3h] 
-    if orb_true_filter_3h != 'All':
-        filtered_df_3h = filtered_df_3h[filtered_df_3h['ORB_valid'] == orb_true_filter_3h] 
-        
-    if period_open_position != 'All':
-
-        if period_open_position == '0% >= x > 25%':
-            filtered_df_3h = filtered_df_3h[(filtered_df_3h['three_hour_open_position'] >= 0) &
-                                            (filtered_df_3h['three_hour_open_position'] < 0.25)] 
-        if period_open_position == '25% >= x > 50%':
-            filtered_df_3h = filtered_df_3h[(filtered_df_3h['three_hour_open_position'] >= 0.25) &
-                                            (filtered_df_3h['three_hour_open_position'] < 0.50)] 
-        if period_open_position == '50% >= x > 75%':
-            filtered_df_3h = filtered_df_3h[(filtered_df_3h['three_hour_open_position'] >= 0.50) &
-                                            (filtered_df_3h['three_hour_open_position'] < 0.75)] 
-        if period_open_position == '75% >= x > 100%':
-            filtered_df_3h = filtered_df_3h[(filtered_df_3h['three_hour_open_position'] >= 0.75) &
-                                            (filtered_df_3h['three_hour_open_position'] < 1.00)] 
-
-    if pph_hit_time_filter != 'All':
-        filtered_df_3h = filtered_df_3h[filtered_df_3h['phh_hit_bucket'] == pph_hit_time_filter] 
-    if ppl_hit_time_filter != 'All':
-        filtered_df_3h = filtered_df_3h[filtered_df_3h['phl_hit_bucket'] == ppl_hit_time_filter] 
-            
-    if low_filter_3h:
-        filtered_df_3h = filtered_df_3h[~filtered_df_3h['low_bucket'].isin(low_filter_3h)]
-    if high_filter_3h:
-        filtered_df_3h = filtered_df_3h[~filtered_df_3h['high_bucket'].isin(high_filter_3h)]
-
-    # ORB Validity Rate
-    if 'ORB_valid' in filtered_df_3h.columns and not filtered_df_3h.empty:
-        orb_counts = filtered_df_3h['ORB_valid'].value_counts(normalize=True)
-        true_rate = orb_counts.get(True, 0)  # Default to 0 if True isn't present
-        st.metric(label="ORB True Rate (1m Body Close)", value=f"{true_rate:.2%}")
-
-    # Calculate probability distributions for "low bucket" and "high bucket"
-    low_counts = filtered_df_3h["low_bucket"].value_counts(normalize=True).reset_index()
-    low_counts.columns = ["value", "probability"]
-
-    high_counts = filtered_df_3h["high_bucket"].value_counts(normalize=True).reset_index()
-    high_counts.columns = ["value", "probability"]
-
-    # Create a bar chart for "low bucket" probabilities with text annotations
-    desired_order = ["Q1", "Q2", "Q3", "Q4"]
-    fig_low = px.bar(
-        low_counts,
-        x="value",
-        y="probability",
-        title="Low of 3H Bucket",
-        labels={"value": "Low Bucket", "probability": "Probability"},
-        # Format the probability as a percentage (e.g., "12.34%")
-        text=low_counts["probability"].apply(lambda x: f"{x:.2%}")
-    )
-    # Position the text annotations outside the bars
-    fig_low.update_traces(textposition="outside")
-    fig_low.update_layout(
-    xaxis=dict(
-        categoryorder='array',
-        categoryarray=desired_order
-    )
-)
-
-    # Create a bar chart for "high bucket" probabilities with text annotations
-    fig_high = px.bar(
-        high_counts,
-        x="value",
-        y="probability",
-        title="High of 3H Bucket",
-        labels={"value": "High Bucket", "probability": "Probability"},
-        text=high_counts["probability"].apply(lambda x: f"{x:.2%}")
-    )
-    fig_high.update_traces(textposition="outside")
-    fig_high.update_layout(
-    xaxis=dict(
-        categoryorder='array',
-        categoryarray=desired_order
-    )
-)
-
-    # Here, the proportion (mean) of True values in a boolean series represents the percentage hit.
-    pph_hit_pct = filtered_df_3h['phh_hit'].mean()
-    ppl_hit_pct = filtered_df_3h['phl_hit'].mean()
-    ppmid_hit_pct = filtered_df_3h['pmid_hit'].mean()
-    
-    # Create a DataFrame for plotting
-    hit_pct_df = pd.DataFrame({
-        'Hit Type': ['PPH Hit', 'PPL Hit', 'PPM Hit'],
-        'Percentage': [pph_hit_pct, ppl_hit_pct, ppmid_hit_pct]
-    })
-    
-    # Create a bar chart for hit percentages
-    fig_hits = px.bar(
-        hit_pct_df,
-        x="Hit Type",
-        y="Percentage",
-        title="PPH / PPL / PPM Hit Rate",
-        labels={"Hit Type": "Hit Type", "Percentage": "Hit Percentage"},
-        text=hit_pct_df["Percentage"].apply(lambda x: f"{x:.2%}")
-    )
-    fig_hits.update_layout(title={'x': 0.5, 'xanchor': 'center'})
-
-    fig_hits.update_traces(textposition='outside')
-    fig_hits.update_yaxes(range=[0, 1])
-
-    # Display the two charts side by side using st.columns
-    col1, col2, col3 = st.columns((1, 2, 2))
-    col1.plotly_chart(fig_hits, use_container_width=True)
-    col2.plotly_chart(fig_low, use_container_width=True)
-    col3.plotly_chart(fig_high, use_container_width=True)
-
-
-# Calculate distribution of hour_direction in the filtered data
-# Normalize direction values
-filtered_df_3h['three_hour_direction'] = filtered_df_3h['three_hour_direction'].str.strip().str.title()
-
-# Recalculate counts
-three_hour_direction_counts = filtered_df_3h['three_hour_direction'].value_counts().reset_index()
-three_hour_direction_counts.columns = ['direction', 'count']
-
-direction_order = ["Long", "Short", "Neutral"]
-direction_colors = {
-    "Long": "#2ecc71",       # Green
-    "Short": "#e74c3c",     # Red
-    "Neutral": "#5d6d7e"   # Gray
-}
-
-quartals = ["Q1_direction", "Q2_direction", "Q3_direction", "Q4_direction", "three_hour_direction"]
-quartal_titles = ["Q1 Direction", "Q2 Direction", "Q3 Direction", "Q4 Direction", "Hour Direction"]
-
-q_cols = st.columns(5)
-
-for i, q_col in enumerate(quartals):
-    # Normalize and count values
-    filtered_df_3h[q_col] = filtered_df_3h[q_col].str.strip().str.title()
-    q_counts = filtered_df_3h[q_col].value_counts().reset_index()
-    q_counts.columns = ['direction', 'count']
-
-    # Build pie chart
-    fig_q = px.pie(
-        q_counts,
-        names='direction',
-        values='count',
-        color='direction',
-        title=quartal_titles[i],
-        hole=0.3,
-        category_orders={'direction': direction_order},
-        color_discrete_map=direction_colors
-    )
-    fig_q.update_traces(textinfo='percent+label')
-    q_cols[i].plotly_chart(fig_q, use_container_width=True)
-
-st.caption(f"Sample size: {len(filtered_df_3h):,} rows")
