@@ -273,7 +273,7 @@ if df_1h is not None:
         
     if hourly_open_position != 'All':
 
-            low, high = POSITION_BUCKETS[position_label]
+            low, high = SIZE_BINS_0_5[hourly_open_position]
             mask = (
                 (filtered_df_1h["hourly_open_position"] >= low) &
                 (filtered_df_1h["hourly_open_position"] <  high)
