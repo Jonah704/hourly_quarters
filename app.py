@@ -35,6 +35,8 @@ df_3h = load_quartal_for_instrument([url_3h_eq, url_3h_comm], selected_instrumen
 USER_CREDENTIALS = {
     "badboyz": "bangbang",
     "dreamteam" : "strike",
+    "Almkuh"    : "Weidemilch",
+    "Sha"       : "Cyprus", 
 }
 
 # ✅ Initialize session state for authentication
