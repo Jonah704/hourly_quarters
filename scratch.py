@@ -10,7 +10,7 @@ def load_quartal_for_instrument(instrument: str, period: str = "1H") -> pd.DataF
     """
     Load the 1-minute quartal file for a single instrument.
     period must be "1H" or "3H".
-    """
+    """ 
     base = "https://raw.githubusercontent.com/TuckerArrants/hourly_quarters/main"
     if period == "1H":
         fname = f"{instrument}_Hourly_Quartal_1min_Processed_from_2008_downcast.csv"
