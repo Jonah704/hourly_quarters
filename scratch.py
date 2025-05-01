@@ -68,7 +68,6 @@ if not st.session_state["authenticated"]:
     st.stop()
 
 # ✅ If authenticated, show the full app
-st.sidebar.success(f"Logged in as: **{st.session_state['username']}**")
 st.title("Quartal Database")
 
 # ✅ Logout button in the sidebar
