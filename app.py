@@ -279,7 +279,7 @@ if df_1h is not None:
         filtered_df_1h = filtered_df_1h[~filtered_df_1h['high_bucket'].isin(high_filter)]
 
     # Create two side-by-side columns
-    col0, col1, col2, col3, col4, col5, col6, col7 = st.columns([1, 1, 1, 1, 1, 1, 1, 1])
+    col0, col1, col2, col3, col4, col5, col6, col7 = st.columns([1, 1.2, 1, 1.2, 1, 1, 1, 1])
     
     # 0–5 ORB True Rate
     if '0_5_ORB_valid' in filtered_df_1h.columns and not filtered_df_1h.empty:
