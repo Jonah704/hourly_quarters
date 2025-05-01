@@ -265,20 +265,19 @@ if df_1h is not None:
         filtered_df_1h = filtered_df_1h[filtered_df_1h['5_10_ORB_conf_bucket'] == orb_conf_filter_5_10] 
 
     if orb_size_filter_5_10 != 'All':
-            low, high = SIZE_BINS_0_5[orb_size_filter_5_10]
-            # filter on the absolute value
-            filtered_df_1h = filtered_df_1h[
-                filtered_df_1h['5_10_ORB_body_size'].abs().between(low, high, inclusive='left')
-            ]
+        low, high = SIZE_BINS_0_5[orb_size_filter_5_10]
+        # filter on the absolute value
+        filtered_df_1h = filtered_df_1h[
+            filtered_df_1h['5_10_ORB_body_size'].abs().between(low, high, inclusive='left')
+        ]
         
     if hourly_open_position != 'All':
-
-            low, high = SIZE_BINS_0_5[hourly_open_position]
-            mask = (
-                (filtered_df_1h["hourly_open_position"] >= low) &
-                (filtered_df_1h["hourly_open_position"] <  high)
-            )
-            filtered_df_1h = filtered_df_1h[mask]
+        low, high = SIZE_BINS_0_5[hourly_open_position]
+        # inclusive on left, exclusive on right
+        filtered_df_1h = filtered_df_1h[
+            filtered_df_1h['hourly_open_position']
+                         .between(low, high, inclusive='left')
+        ]
 
     if phh_hit_time_filter != 'All':
         filtered_df_1h = filtered_df_1h[filtered_df_1h['phh_hit_bucket'] == phh_hit_time_filter] 
