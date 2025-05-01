@@ -12,7 +12,8 @@ def load_quartal(urls, version="v3"):   # <- bump this string to invalidate
     for url in urls:
         df = pd.read_csv(url)
         df = df.drop(columns=[
-            'Unnamed: 0','Unnamed: 0.1','phh_hit_time','phl_hit_time','date'
+            'Unnamed: 0','Unnamed: 0.1','phh_hit_time','phl_hit_time','date',
+            #'0_5_ORB_conf_time', '5_10_ORB_conf_time'
         ], errors='ignore')
         dfs.append(df)
     full = pd.concat(dfs, ignore_index=True)
@@ -75,8 +76,9 @@ if st.sidebar.button("Logout"):
 
 for col in [
     'Instrument','Q1_direction','Q2_direction','Q3_direction','Q4_direction',
-    '0_5_ORB_direction','0_5_ORB_valid',
-    '5_10_ORB_direction','5_10_ORB_valid',
+    'Q1_direction_from_open','Q2_direction_from_open','Q3_direction_from_open','Q4_direction_from_open'
+    '0_5_ORB_direction','0_5_ORB_valid', '0_5_ORB_conf_bucket',
+    '5_10_ORB_direction','5_10_ORB_valid', '5_10_ORB_conf_bucket',
     'hour_direction',
     'day_of_week','phh_hit_bucket','phl_hit_bucket',
     'low_bucket','high_bucket'
@@ -140,10 +142,7 @@ if df_1h is not None:
     with row1_cols[4]:
         hourly_open_position = st.radio(
             "Hourly Open Position",
-            options=["All"] + [
-                '0% ≥ x > 25%', '25% ≥ x > 50%',
-                '50% ≥ x > 75%', '75% ≥ x > 100%'
-            ],
+            options=["All"] + list(SIZE_BINS_0_5.keys()),
             horizontal=False
         )
     with row1_cols[5]:
@@ -266,26 +265,19 @@ if df_1h is not None:
         filtered_df_1h = filtered_df_1h[filtered_df_1h['5_10_ORB_conf_bucket'] == orb_conf_filter_5_10] 
 
     if orb_size_filter_5_10 != 'All':
-            low, high = SIZE_BINS_0_5[orb_size_filter_5_10]
-            # filter on the absolute value
-            filtered_df_1h = filtered_df_1h[
-                filtered_df_1h['5_10_ORB_body_size'].abs().between(low, high, inclusive='left')
-            ]
+        low, high = SIZE_BINS_0_5[orb_size_filter_5_10]
+        # filter on the absolute value
+        filtered_df_1h = filtered_df_1h[
+            filtered_df_1h['5_10_ORB_body_size'].abs().between(low, high, inclusive='left')
+        ]
         
     if hourly_open_position != 'All':
-
-        if hourly_open_position == '0% >= x > 25%':
-            filtered_df_1h = filtered_df_1h[(filtered_df_1h['hourly_open_position'] >= 0) &
-                                            (filtered_df_1h['hourly_open_position'] < 0.25)] 
-        if hourly_open_position == '25% >= x > 50%':
-            filtered_df_1h = filtered_df_1h[(filtered_df_1h['hourly_open_position'] >= 0.25) &
-                                            (filtered_df_1h['hourly_open_position'] < 0.50)] 
-        if hourly_open_position == '50% >= x > 75%':
-            filtered_df_1h = filtered_df_1h[(filtered_df_1h['hourly_open_position'] >= 0.50) &
-                                            (filtered_df_1h['hourly_open_position'] < 0.75)] 
-        if hourly_open_position == '75% >= x > 100%':
-            filtered_df_1h = filtered_df_1h[(filtered_df_1h['hourly_open_position'] >= 0.75) &
-                                            (filtered_df_1h['hourly_open_position'] < 1.00)] 
+        low, high = SIZE_BINS_0_5[hourly_open_position]
+        # inclusive on left, exclusive on right
+        filtered_df_1h = filtered_df_1h[
+            filtered_df_1h['hourly_open_position']
+                         .between(low, high, inclusive='left')
+        ]
 
     if phh_hit_time_filter != 'All':
         filtered_df_1h = filtered_df_1h[filtered_df_1h['phh_hit_bucket'] == phh_hit_time_filter] 
