@@ -312,7 +312,7 @@ if df_1h is not None:
         orb5_10_hourly_hit = filtered_df_1h['5_10_ORB_retrace_to_hourly_open'].value_counts(normalize=True)
         rate5_10_hourly_hit = orb5_10_hourly_hit.get(True, 0)
         col3.metric(
-            label="5-10 Retr. to Hourly Open After Conf.",
+            label="5-10 Retr. to 1H Open After Conf.",
             value=f"{rate5_10_hourly_hit:.2%}"
         )
 
@@ -342,7 +342,7 @@ if df_1h is not None:
         q4_hourly_hit = filtered_df_1h['Q4_touched_open'].value_counts(normalize=True)
         rateq4_hourly_hit = q4_hourly_hit.get(True, 0)
         col7.metric(
-            label="Q4 Hit Hourly Open",
+            label="Q4 Hit 1H Open",
             value=f"{rateq4_hourly_hit:.2%}"
         )
 
