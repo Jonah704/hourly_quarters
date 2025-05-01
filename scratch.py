@@ -70,12 +70,6 @@ if not st.session_state["authenticated"]:
 # ✅ If authenticated, show the full app
 st.title("Quartal Database")
 
-# ✅ Logout button in the sidebar
-if st.sidebar.button("Logout"):
-    st.session_state["authenticated"] = False
-    st.session_state["username"] = None
-    st.rerun()
-
 for col in [
     'Instrument','Q1_direction','Q2_direction','Q3_direction','Q4_direction',
     'Q1_direction_from_open','Q2_direction_from_open','Q3_direction_from_open','Q4_direction_from_open'
