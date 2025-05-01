@@ -7,17 +7,17 @@ st.set_page_config(layout='wide')
 
 # 1) Define a cached loader
 @st.cache_data
-def load_quartal(urls, version="v3"):   # <- bump this string to invalidate
+def load_quartal_for_instrument(urls, instrument, version="v3"):
     dfs = []
     for url in urls:
-        df = pd.read_csv(url)
-        df = df.drop(columns=[
-            'Unnamed: 0','Unnamed: 0.1','phh_hit_time','phl_hit_time','date',
-            #'0_5_ORB_conf_time', '5_10_ORB_conf_time'
-        ], errors='ignore')
-        dfs.append(df)
-    full = pd.concat(dfs, ignore_index=True)
-    return full
+        df = pd.read_csv(url, usecols=None)          # load the whole chunk…
+        df = df[df["Instrument"] == instrument]      # …but immediately filter
+        if not df.empty:
+            dfs.append(df)
+    if not dfs:
+        return pd.DataFrame()                        # no rows for that instrument
+    return pd.concat(dfs, ignore_index=True)
+
 
 # 2) Call the loader for 1H and 3H data
 url_1h_eq   = "https://raw.githubusercontent.com/TuckerArrants/hourly_quarters/main/ES_NQ_YM_Hourly_Quartal_1min_Processed_from_2016.csv"
@@ -25,8 +25,11 @@ url_1h_comm = "https://raw.githubusercontent.com/TuckerArrants/hourly_quarters/m
 url_3h_eq   = "https://raw.githubusercontent.com/TuckerArrants/hourly_quarters/main/ES_NQ_YM_3H_Quartal_1min_Processed_from_2016.csv"
 url_3h_comm = "https://raw.githubusercontent.com/TuckerArrants/hourly_quarters/main/CL_GC_3H_Quartal_1min_Processed_from_2016.csv"
 
-df_1h = load_quartal([url_1h_eq, url_1h_comm])
-df_3h = load_quartal([url_3h_eq, url_3h_comm])
+instrument_options = ["ES", "NQ", "YM", "CL", "GC", "NG", "SI"]  # or pull from a small manifest
+selected_instrument = st.sidebar.selectbox("Instrument", instrument_options)
+
+df_1h = load_quartal_for_instrument([url_1h_eq, url_1h_comm])
+df_3h = load_quartal_for_instrument([url_3h_eq, url_3h_comm])
 
 # ✅ Store username-password pairs
 USER_CREDENTIALS = {
