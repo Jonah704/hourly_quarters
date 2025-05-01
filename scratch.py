@@ -13,7 +13,7 @@ def load_quartal_for_instrument(instrument: str, period: str = "1H") -> pd.DataF
     """
     base = "https://raw.githubusercontent.com/TuckerArrants/hourly_quarters/main"
     if period == "1H":
-        fname = f"{instrument}_Hourly_Quartal_1min_Processed_from_2016.csv"
+        fname = f"{instrument}_Hourly_Quartal_1min_Processed_from_2008.csv"
     elif period == "3H":
         fname = f"{instrument}_3H_Quartal_1min_Processed_from_2016.csv"
     else:
@@ -83,9 +83,6 @@ for col in [
 ]:
     if col in df_1h:
         df_1h[col] = df_1h[col].astype('category')
-
-df_1h["three_hour_start"] = (df_1h["hour"] // 3) * 3
-
 
 if df_1h is not None:
 
