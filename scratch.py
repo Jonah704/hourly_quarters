@@ -326,14 +326,14 @@ if df_1h is not None:
 
     if 'Q2_touched_open' in filtered_df_1h.columns and not filtered_df_1h.empty:
         q2_hourly_hit = filtered_df_1h['Q2_touched_open'].value_counts(normalize=True)
-        rateq2_hourly_hit = q1_hourly_hit.get(True, 0)
+        rateq2_hourly_hit = q2_hourly_hit.get(True, 0)
         col5.metric(
             label="Q2 Hit Hourly Open",
             value=f"{rateq2_hourly_hit:.2%}"
         )
     if 'Q3_touched_open' in filtered_df_1h.columns and not filtered_df_1h.empty:
         q3_hourly_hit = filtered_df_1h['Q3_touched_open'].value_counts(normalize=True)
-        rateq3_hourly_hit = q1_hourly_hit.get(True, 0)
+        rateq3_hourly_hit = q3_hourly_hit.get(True, 0)
         col6.metric(
             label="Q3 Hit Hourly Open",
             value=f"{rateq3_hourly_hit:.2%}"
