@@ -294,7 +294,7 @@ if df_1h is not None:
         orb0_5_hourly_hit = filtered_df_1h['0_5_ORB_retrace_to_hourly_open'].value_counts(normalize=True)
         rateorb0_5_hourly_hit = orb0_5_hourly_hit.get(True, 0)
         col1.metric(
-            label="0-5 Retr. to Hourly Open After Conf.",
+            label="0-5 Retr. to 1H Open After Conf.",
             value=f"{rateorb0_5_hourly_hit:.2%}"
         )
     
