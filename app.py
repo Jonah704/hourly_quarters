@@ -26,7 +26,6 @@ def load_quartal_for_instrument(instrument: str, period: str = "1H") -> pd.DataF
         return pd.DataFrame()
 
 # ↓ now pull exactly one file per timeframe:
-df_1h = load_quartal_for_instrument(selected_instrument, period="1H")
 
 # ✅ Store username-password pairs
 USER_CREDENTIALS = {
