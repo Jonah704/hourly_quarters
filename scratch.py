@@ -28,8 +28,8 @@ url_3h_comm = "https://raw.githubusercontent.com/TuckerArrants/hourly_quarters/m
 instrument_options = ["ES", "NQ", "YM", "CL", "GC", "NG", "SI"]  # or pull from a small manifest
 selected_instrument = st.sidebar.selectbox("Instrument", instrument_options)
 
-df_1h = load_quartal_for_instrument([url_1h_eq, url_1h_comm])
-df_3h = load_quartal_for_instrument([url_3h_eq, url_3h_comm])
+df_1h = load_quartal_for_instrument([url_1h_eq, url_1h_comm], selected_instrument)
+df_3h = load_quartal_for_instrument([url_3h_eq, url_3h_comm], selected_instrument)
 
 # ✅ Store username-password pairs
 USER_CREDENTIALS = {
