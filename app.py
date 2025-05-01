@@ -25,10 +25,6 @@ def load_quartal_for_instrument(instrument: str, period: str = "1H") -> pd.DataF
         # fallback to empty DF if file not found or network hiccup
         return pd.DataFrame()
 
-# ↓ in your sidebar:
-instrument_options = ["ES", "NQ", "YM", "CL", "GC", "NG", "SI", "E6", "FDAX"]
-selected_instrument = st.sidebar.selectbox("Instrument", instrument_options)
-
 # ↓ now pull exactly one file per timeframe:
 df_1h = load_quartal_for_instrument(selected_instrument, period="1H")
 
@@ -70,6 +66,10 @@ if not st.session_state["authenticated"]:
 
 # ✅ If authenticated, show the full app
 st.title("Quartal Database")
+
+# ↓ in your sidebar:
+instrument_options = ["ES", "NQ", "YM", "CL", "GC", "NG", "SI", "E6", "FDAX"]
+selected_instrument = st.sidebar.selectbox("Instrument", instrument_options)
 
 for col in [
     'Instrument','Q1_direction','Q2_direction','Q3_direction','Q4_direction',
