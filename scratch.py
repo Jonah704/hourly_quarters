@@ -7,7 +7,7 @@ st.set_page_config(layout='wide')
 
 # 1) Define a cached loader
 @st.cache_data
-def load_quartal_for_instrument(urls, instrument, version="v3"):
+def load_quartal_for_instrument(urls, instrument, version="v1"):
     dfs = []
     for url in urls:
         df = pd.read_csv(url, usecols=None)          # load the whole chunk…
