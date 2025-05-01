@@ -71,6 +71,8 @@ st.title("Quartal Database")
 instrument_options = ["ES", "NQ", "YM", "CL", "GC", "NG", "SI", "E6", "FDAX"]
 selected_instrument = st.sidebar.selectbox("Instrument", instrument_options)
 
+df_1h = load_quartal_for_instrument(selected_instrument, period="1H")
+
 for col in [
     'Instrument','Q1_direction','Q2_direction','Q3_direction','Q4_direction',
     'Q1_direction_from_open','Q2_direction_from_open','Q3_direction_from_open','Q4_direction_from_open'
