@@ -142,9 +142,7 @@ if df_1h is not None:
     with row1_cols[4]:
         hourly_open_position = st.radio(
             "Hourly Open Position",
-            options=["All"] + [
-                '0% ≥ x > 25%', '25% ≥ x > 50%',
-                '50% ≥ x > 75%', '75% ≥ x > 100%'
+            options=["All"] + list(SIZE_BINS_0_5.keys())
             ],
             horizontal=False
         )
@@ -276,18 +274,12 @@ if df_1h is not None:
         
     if hourly_open_position != 'All':
 
-        if hourly_open_position == '0% >= x > 25%':
-            filtered_df_1h = filtered_df_1h[(filtered_df_1h['hourly_open_position'] >= 0) &
-                                            (filtered_df_1h['hourly_open_position'] < 0.25)] 
-        if hourly_open_position == '25% >= x > 50%':
-            filtered_df_1h = filtered_df_1h[(filtered_df_1h['hourly_open_position'] >= 0.25) &
-                                            (filtered_df_1h['hourly_open_position'] < 0.50)] 
-        if hourly_open_position == '50% >= x > 75%':
-            filtered_df_1h = filtered_df_1h[(filtered_df_1h['hourly_open_position'] >= 0.50) &
-                                            (filtered_df_1h['hourly_open_position'] < 0.75)] 
-        if hourly_open_position == '75% >= x > 100%':
-            filtered_df_1h = filtered_df_1h[(filtered_df_1h['hourly_open_position'] >= 0.75) &
-                                            (filtered_df_1h['hourly_open_position'] < 1.00)] 
+            low, high = POSITION_BUCKETS[position_label]
+            mask = (
+                (filtered_df_1h["hourly_open_position"] >= low) &
+                (filtered_df_1h["hourly_open_position"] <  high)
+            )
+            filtered_df_1h = filtered_df_1h[mask]
 
     if phh_hit_time_filter != 'All':
         filtered_df_1h = filtered_df_1h[filtered_df_1h['phh_hit_bucket'] == phh_hit_time_filter] 
