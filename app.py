@@ -142,7 +142,7 @@ if df_1h is not None:
     with row1_cols[4]:
         hourly_open_position = st.radio(
             "Hourly Open Position",
-            options=["All"] + list(SIZE_BINS_0_5.keys())
+            options=["All"] + list(SIZE_BINS_0_5.keys()),
             ],
             horizontal=False
         )
