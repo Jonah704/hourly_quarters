@@ -32,7 +32,6 @@ selected_instrument = st.sidebar.selectbox("Instrument", instrument_options)
 
 # ↓ now pull exactly one file per timeframe:
 df_1h = load_quartal_for_instrument(selected_instrument, period="1H")
-st.sidebar.write("1H cols:", df_1h.columns.tolist())
 
 # ✅ Store username-password pairs
 USER_CREDENTIALS = {
