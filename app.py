@@ -103,7 +103,7 @@ if df_1h is not None:
     '75% to 100%': (0.75, 1.00),
     }
     # — Row 1 —
-    row1_cols = st.columns([1, 1, 1, 1, 1, 1, 1, 1])
+    row1_cols = st.columns([1, 1.2, 1, 1.2, 1, 1, 1, 1])
     with row1_cols[0]:
         q1_filter = st.radio(
             "Q1",
