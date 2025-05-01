@@ -96,9 +96,6 @@ df_1h["three_hour_start"] = (df_1h["hour"] // 3) * 3
 
 if df_1h is not None:
 
-    ### **Sidebar: Select Instrument and DR Range**
-    instrument_options = df_1h['Instrument'].dropna().unique().tolist()
-    selected_instrument = st.sidebar.selectbox("Select Instrument", instrument_options)
     hour_options = ['All'] + list(range(0, 24))
     hour_options.remove(17)
     three_hour_options = ['All'] + [0, 3, 6, 9, 12, 15, 18, 21]
