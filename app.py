@@ -72,6 +72,14 @@ selected_instrument = st.sidebar.selectbox("Instrument", instrument_options)
 
 df_1h = load_quartal_for_instrument(selected_instrument, period="1H")
 
+# 1) Make sure 'date' is a datetime column
+if "date" in df_1h.columns:
+    df_1h["date"] = pd.to_datetime(df_1h["date"])
+else:
+    st.sidebar.warning("No 'date' column found in your data!")
+
+# 2) Add a date‐range picker to the sidebar
+
 for col in [
     'Instrument','Q1_direction','Q2_direction','Q3_direction','Q4_direction',
     'Q1_direction_from_open','Q2_direction_from_open','Q3_direction_from_open','Q4_direction_from_open'
@@ -93,6 +101,24 @@ if df_1h is not None:
     day_options = ['All'] + ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
     selected_day = st.sidebar.selectbox("Day of Week", day_options)
     selected_quarter_measurement = st.sidebar.selectbox("Measure Quarter From", ["Hourly Open", "Quarterly Open"])
+    
+    min_date = df_1h["date"].min().date()
+    max_date = df_1h["date"].max().date()
+    start_date, end_date = st.sidebar.date_input(
+        "Select date range:",
+        value=(min_date, max_date),
+        min_value=min_date,
+        max_value=max_date
+    )
+    # 3) Filter your DataFrame
+    if isinstance(start_date, tuple):
+        # sometimes date_input returns a single date if you pass a single default
+        start_date, end_date = start_date
+
+    df_1h = df_1h.loc[
+        (df_1h["date"].dt.date >= start_date) &
+        (df_1h["date"].dt.date <= end_date)
+    ]
 
 
     #Filters
