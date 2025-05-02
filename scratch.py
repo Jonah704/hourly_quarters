@@ -25,13 +25,7 @@ def load_quartal_for_instrument(instrument: str, period: str = "1H") -> pd.DataF
         # fallback to empty DF if file not found or network hiccup
         return pd.DataFrame()
 
-
-# ↓ in your sidebar:
-instrument_options = ["ES", "NQ", "YM", "CL", "GC", "NG", "SI", "E6", "FDAX"]
-selected_instrument = st.sidebar.selectbox("Instrument", instrument_options)
-
 # ↓ now pull exactly one file per timeframe:
-df_1h = load_quartal_for_instrument(selected_instrument, period="1H")
 
 # ✅ Store username-password pairs
 USER_CREDENTIALS = {
@@ -71,6 +65,29 @@ if not st.session_state["authenticated"]:
 
 # ✅ If authenticated, show the full app
 st.title("Quartal Database")
+
+# ↓ in your sidebar:
+instrument_options = ["ES", "NQ", "YM", "CL", "GC", "NG", "SI", "E6", "FDAX"]
+selected_instrument = st.sidebar.selectbox("Instrument", instrument_options)
+
+df_1h = load_quartal_for_instrument(selected_instrument, period="1H")
+
+# 1) Make sure 'date' is a datetime column
+if "date" in df_1h.columns:
+    df_1h["date"] = pd.to_datetime(df_1h["date"])
+else:
+    st.sidebar.warning("No 'date' column found in your data!")
+
+# 2) Add a date‐range picker to the sidebar
+if not df_1h.empty and "date" in df_1h.columns:
+    min_date = df_1h["date"].min().date()
+    max_date = df_1h["date"].max().date()
+    start_date, end_date = st.sidebar.date_input(
+        "Select date range:",
+        value=(min_date, max_date),
+        min_value=min_date,
+        max_value=max_date
+    )
 
 for col in [
     'Instrument','Q1_direction','Q2_direction','Q3_direction','Q4_direction',
@@ -279,7 +296,7 @@ if df_1h is not None:
         filtered_df_1h = filtered_df_1h[~filtered_df_1h['high_bucket'].isin(high_filter)]
 
     # Create two side-by-side columns
-    col0, col1, col2, col3, col4, col5, col6, col7 = st.columns([3, 3, 3, 3, 3, 3, 3, 3])
+    col0, col1, col2, col3, col4, col5, col6, col7 = st.columns([1, 1.2, 1, 1.2, 1, 1, 1, 1])
     
     # 0–5 ORB True Rate
     if '0_5_ORB_valid' in filtered_df_1h.columns and not filtered_df_1h.empty:
@@ -294,7 +311,7 @@ if df_1h is not None:
         orb0_5_hourly_hit = filtered_df_1h['0_5_ORB_retrace_to_hourly_open'].value_counts(normalize=True)
         rateorb0_5_hourly_hit = orb0_5_hourly_hit.get(True, 0)
         col1.metric(
-            label="0-5 Retrace to Hourly Open After Conf.",
+            label="0-5 Retr. to 1H Open After Conf.",
             value=f"{rateorb0_5_hourly_hit:.2%}"
         )
     
@@ -312,7 +329,7 @@ if df_1h is not None:
         orb5_10_hourly_hit = filtered_df_1h['5_10_ORB_retrace_to_hourly_open'].value_counts(normalize=True)
         rate5_10_hourly_hit = orb5_10_hourly_hit.get(True, 0)
         col3.metric(
-            label="5-10 Retrace to Hourly Open After Conf.",
+            label="5-10 Retr. to 1H Open After Conf.",
             value=f"{rate5_10_hourly_hit:.2%}"
         )
 
@@ -342,7 +359,7 @@ if df_1h is not None:
         q4_hourly_hit = filtered_df_1h['Q4_touched_open'].value_counts(normalize=True)
         rateq4_hourly_hit = q4_hourly_hit.get(True, 0)
         col7.metric(
-            label="Q4 Hit Hourly Open",
+            label="Q4 Hit 1H Open",
             value=f"{rateq4_hourly_hit:.2%}"
         )
 
