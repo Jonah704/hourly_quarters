@@ -98,9 +98,6 @@ if not df_1h.empty and "date" in df_1h.columns:
         (df_1h["date"].dt.date <= end_date)
     ]
 
-# 4) (Optional) show what you’re working with
-st.sidebar.write(f"Showing {len(df_1h)} rows between {start_date} and {end_date}")
-
 for col in [
     'Instrument','Q1_direction','Q2_direction','Q3_direction','Q4_direction',
     'Q1_direction_from_open','Q2_direction_from_open','Q3_direction_from_open','Q4_direction_from_open'
@@ -122,6 +119,14 @@ if df_1h is not None:
     day_options = ['All'] + ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
     selected_day = st.sidebar.selectbox("Day of Week", day_options)
     selected_quarter_measurement = st.sidebar.selectbox("Measure Quarter From", ["Hourly Open", "Quarterly Open"])
+    min_date = df_1h["date"].min().date()
+    max_date = df_1h["date"].max().date()
+    start_date, end_date = st.sidebar.date_input(
+        "Select date range:",
+        value=(min_date, max_date),
+        min_value=min_date,
+        max_value=max_date
+    )
 
 
     #Filters
