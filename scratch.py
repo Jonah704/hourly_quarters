@@ -88,6 +88,18 @@ if not df_1h.empty and "date" in df_1h.columns:
         min_value=min_date,
         max_value=max_date
     )
+    # 3) Filter your DataFrame
+    if isinstance(start_date, tuple):
+        # sometimes date_input returns a single date if you pass a single default
+        start_date, end_date = start_date
+
+    df_1h = df_1h.loc[
+        (df_1h["date"].dt.date >= start_date) &
+        (df_1h["date"].dt.date <= end_date)
+    ]
+
+# 4) (Optional) show what you’re working with
+st.sidebar.write(f"Showing {len(df_1h)} rows between {start_date} and {end_date}")
 
 for col in [
     'Instrument','Q1_direction','Q2_direction','Q3_direction','Q4_direction',
