@@ -530,7 +530,6 @@ if df_1h is not None:
     
     st.markdown("### Quarter and Hourly Direction")
 
-    quarter_col_label
     quartals = [f'Q1_{quarter_col_label}' f'Q1_{quarter_col_label}', f'Q2_{quarter_col_label}', f'Q3_{quarter_col_label}', f'Q4_{quarter_col_label}']
     quartal_titles = ["Q1 Direction", "Q2 Direction", "Q3 Direction", "Q4 Direction", "Hour Direction"]
     
